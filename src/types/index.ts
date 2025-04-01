@@ -13,6 +13,7 @@ export interface CountdownTime {
 }
 
 export interface Translation {
+  title: string;
   days: string;
   hours: string;
   minutes: string;
@@ -23,19 +24,21 @@ export interface Translation {
 
 export const translations: Record<Language, Translation> = {
   en: {
+    title: 'Wedding Invitation',
     days: 'Days',
     hours: 'Hours',
     minutes: 'Minutes',
     seconds: 'Seconds',
     joinUs: 'Join us in celebrating our wedding',
-    date: '15th May 2025',
+    date: 'May 15, 2025'
   },
   te: {
+    title: 'వివాహ ఆహ్వానం',
     days: 'రోజులు',
     hours: 'గంటలు',
     minutes: 'నిమిషాలు',
     seconds: 'సెకన్లు',
     joinUs: 'మా వివాహ వేడుకలో పాల్గొనండి',
-    date: 'మే 15, 2025',
-  },
+    date: 'మే 15, 2025'
+  }
 };

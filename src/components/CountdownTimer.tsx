@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CountdownTime, Language, translations } from '../types';
+import type { Language } from '../types';
+import { translations } from '../types';
+
+interface CountdownTime {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
 interface Props {
   language: Language;
@@ -35,22 +43,61 @@ export const CountdownTimer: React.FC<Props> = ({ language }) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12">
-      {Object.entries(time).map(([key, value], index) => (
-        <motion.div
-          key={key}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center"
-        >
-          <div className="text-4xl md:text-5xl font-serif text-deep-rose mb-2">
-            {String(value).padStart(2, '0')}
-          </div>
-          <div className="text-sm md:text-base text-gray-600 font-medium">
-            {t[key as keyof typeof time]}
-          </div>
-        </motion.div>
-      ))}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-md"
+      >
+        <div className="text-4xl md:text-5xl font-serif text-deep-rose mb-2 font-bold">
+          {String(time.days).padStart(2, '0')}
+        </div>
+        <div className="text-sm md:text-base text-gray-700 font-medium uppercase tracking-wide">
+          {language === 'en' ? 'Days' : 'రోజులు'}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-md"
+      >
+        <div className="text-4xl md:text-5xl font-serif text-deep-rose mb-2 font-bold">
+          {String(time.hours).padStart(2, '0')}
+        </div>
+        <div className="text-sm md:text-base text-gray-700 font-medium uppercase tracking-wide">
+          {language === 'en' ? 'Hours' : 'గంటలు'}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-md"
+      >
+        <div className="text-4xl md:text-5xl font-serif text-deep-rose mb-2 font-bold">
+          {String(time.minutes).padStart(2, '0')}
+        </div>
+        <div className="text-sm md:text-base text-gray-700 font-medium uppercase tracking-wide">
+          {language === 'en' ? 'Minutes' : 'నిమిషాలు'}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-md"
+      >
+        <div className="text-4xl md:text-5xl font-serif text-deep-rose mb-2 font-bold">
+          {String(time.seconds).padStart(2, '0')}
+        </div>
+        <div className="text-sm md:text-base text-gray-700 font-medium uppercase tracking-wide">
+          {language === 'en' ? 'Seconds' : 'సెకన్లు'}
+        </div>
+      </motion.div>
     </div>
   );
 };

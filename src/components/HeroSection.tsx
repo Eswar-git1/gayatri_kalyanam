@@ -10,8 +10,8 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
-  const t = translations[language as keyof typeof translations];
-
+  const t = translations[language];
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -50,10 +50,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="text-2xl md:text-3xl text-deep-rose mb-2 font-serif italic"
+        >
+          {language === 'en' ? 'Together in Love, Forever in Joy' : 'ప్రేమతో కలిసి, ఆనందంతో ఎప్పటికీ'}
+        </motion.p>
+
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
           className="text-2xl md:text-3xl text-gray-800 mb-2 font-medium"
         >
-          {t.joinUs}
+          {language === 'en' ? 'Join us in celebrating our wedding' : 'మా వివాహ వేడుకలో పాల్గొనండి'}
         </motion.p>
 
         <motion.p
@@ -62,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
           transition={{ delay: 0.5 }}
           className="text-xl md:text-2xl text-rose-600 font-serif mb-8 font-bold drop-shadow-md"
         >
-          {t.date}
+          {language === 'en' ? 'May 15, 2025' : 'మే 15, 2025'}
         </motion.p>
 
         <CountdownTimer language={language} />
