@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguageStore } from '../store/languageStore';
-import { Globe } from 'lucide-react';
+import { Language } from '../types';
 
 export const LanguageToggle: React.FC = () => {
   const { language, setLanguage } = useLanguageStore();
@@ -12,13 +12,12 @@ export const LanguageToggle: React.FC = () => {
 
   return (
     <motion.button
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
       onClick={toggleLanguage}
-      className="fixed top-6 right-6 z-50 bg-rose-100 px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group hover:bg-rose-200 flex items-center gap-2"
+      className="flex items-center justify-center bg-white/80 backdrop-blur-sm px-3 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
-      <Globe className="w-5 h-5 text-rose-600 group-hover:scale-110 transition-transform duration-300" />
-      <span className="text-rose-600 font-medium">
+      <span className="text-deep-rose font-medium text-sm">
         {language === 'en' ? 'తెలుగు' : 'English'}
       </span>
     </motion.button>

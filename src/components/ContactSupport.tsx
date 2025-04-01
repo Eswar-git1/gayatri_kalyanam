@@ -92,7 +92,7 @@ export const ContactSupport: React.FC<Props> = ({ language }) => {
       
       <footer className="py-8 px-4 bg-deep-rose/10 border-t-2 border-deep-rose/20">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-deep-rose font-serif text-base font-medium tracking-wide">
+          <p className="text-deep-rose font-serif text-base font-bold tracking-wide">
             Designed By Gayathri & Eswar ❤️
           </p>
         </div>

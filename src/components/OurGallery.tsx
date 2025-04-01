@@ -81,26 +81,62 @@ export const OurGallery: React.FC<Props> = ({ language }) => {
           {photos.map((photo, index) => (
             <motion.div
               key={photo.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ 
+                opacity: 1, 
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="relative aspect-square rounded-xl overflow-hidden group"
+              transition={{ 
+                duration: 1,
+                delay: index * 0.2,
+                ease: [0.25, 0.1, 0.25, 1]
+              }}
+              className="flex flex-col group"
             >
-              <img
-                src={photo.photo_url}
-                alt={photo.caption[language]}
-                onError={(e) => {
-                  console.error('Image failed to load:', photo.photo_url);
-                  e.currentTarget.style.backgroundColor = '#eee';
+              <motion.div 
+                className="relative aspect-square rounded-xl overflow-hidden mb-3 shadow-lg"
+                whileHover={{ 
+                  scale: 1.03,
+                  rotateZ: [0, -1, 1, 0],
                 }}
-                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                <p className="text-white text-xl font-serif">
-                  {photo.caption[language]}
-                </p>
-              </div>
+                whileTap={{ 
+                  scale: 1.03,
+                  rotateZ: [0, -1, 1, 0],
+                }}
+                transition={{
+                  scale: { duration: 0.3 },
+                  rotateZ: {
+                    repeat: 0,
+                    duration: 0.5
+                  }
+                }}
+              >
+                <img
+                  src={photo.photo_url}
+                  alt={photo.caption[language]}
+                  onError={(e) => {
+                    console.error('Image failed to load:', photo.photo_url);
+                    e.currentTarget.style.backgroundColor = '#eee';
+                  }}
+                  className="w-full h-full object-cover transform transition-all duration-700 group-hover:saturate-110 touch-manipulation"
+                />
+              </motion.div>
+              <motion.p 
+                className="text-gray-700 text-center font-serif text-lg px-2 relative"
+                initial={{ opacity: 0.8 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  color: 'rgb(190, 24, 93)' // deep-rose color
+                }}
+                whileTap={{ 
+                  scale: 1.02,
+                  color: 'rgb(190, 24, 93)' // deep-rose color
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {photo.caption[language]}
+              </motion.p>
             </motion.div>
           ))}
         </div>

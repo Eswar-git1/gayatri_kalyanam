@@ -49,6 +49,11 @@ const story = {
         description: 'అదృష్టవశాత్తు, గాయత్రి తల్లిదండ్రులు ఆ పెళ్లిలో ఈశ్వర్‌ని గమనించారు. ఆకట్టుకున్న వారు సాంప్రదాయ పెళ్లి చూపులు ఏర్పాటు చేశారు. వారి కళ్ళు కలిసిన క్షణం నుండి, ఏదో కుదిరినట్లు అనిపించింది—రెండు హృదయాలు సరిపోయాయి, రెండు మనసులు అర్థం చేసుకున్నాయి.'
       },
       {
+        date: 'మార్చి 12, 2025',
+        title: 'నిశ్చితార్థం',
+        description: 'మా కుటుంబాల ఆశీర్వాదంతో, ఉంగరాలు మార్పిడి చేసుకుని ఒకరికొకరు మాట ఇచ్చుకున్న అందమైన వేడుక. వివాహం వైపు మా ప్రయాణాన్ని గుర్తు చేసే ఆనందభరితమైన రోజు.'
+      },
+      {
         date: 'మే 15, 2025',
         title: 'వివాహ రోజు',
         description: 'సాంప్రదాయంలో వేరూనుకుని, ప్రేమగా వికసించిన సరళమైన కథ. మా ప్రయాణం ప్రారంభమవుతున్న ఈ క్షణాన్ని మాతో పంచుకోండి.'
@@ -171,15 +176,15 @@ export const StoryTimeline: React.FC<Props> = ({ language }) => {
     }
   }, []);
 
-  const renderTimeline = (title: string, events: any[]) => (
+  const renderTimeline = (title: string, events: any[], isMarriageEvents = false) => (
     <div className="timeline-section mb-20">
-      <h2 className="text-4xl font-serif text-deep-rose text-center mb-16">
+      <h2 className={`text-4xl font-serif ${isMarriageEvents ? 'text-amber-700' : 'text-deep-rose'} text-center mb-16`}>
         {title}
       </h2>
 
       <div className="relative">
         {/* Timeline line */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-pastel-rose" />
+        <div className={`absolute left-1/2 transform -translate-x-1/2 h-full w-px ${isMarriageEvents ? 'bg-amber-200' : 'bg-pastel-rose'}`} />
 
         {/* Timeline events */}
         {events.map((event, index) => (
@@ -191,17 +196,23 @@ export const StoryTimeline: React.FC<Props> = ({ language }) => {
           >
             {/* Event content */}
             <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
-              <h3 className={`text-xl font-serif text-deep-rose mb-2 ${language === 'te' ? 'text-2xl' : ''}`}>
+              <h3 className={`text-xl font-serif mb-2 ${language === 'te' ? 'text-2xl' : ''} ${
+                isMarriageEvents ? 'text-amber-700' : 'text-deep-rose'
+              }`}>
                 {event.title}
               </h3>
               <p className={`text-gray-500 mb-2 ${language === 'te' ? 'text-lg' : ''}`}>{event.date}</p>
-              <p className={`text-gray-600 ${language === 'te' ? 'text-lg leading-relaxed' : ''}`}>
+              <p className={`${language === 'te' ? 'text-lg leading-relaxed' : ''} ${
+                isMarriageEvents ? 'text-amber-900' : 'text-gray-600'
+              }`}>
                 {event.description}
               </p>
             </div>
 
             {/* Timeline dot */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-deep-rose rounded-full" />
+            <div className={`absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full ${
+              isMarriageEvents ? 'bg-amber-600' : 'bg-deep-rose'
+            }`} />
           </div>
         ))}
       </div>
@@ -211,8 +222,8 @@ export const StoryTimeline: React.FC<Props> = ({ language }) => {
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-4xl mx-auto" ref={timelineRef}>
-        {renderTimeline(title, events)}
-        {renderTimeline(marriageEventsData.title, marriageEventsData.events)}
+        {renderTimeline(title, events, false)}
+        {renderTimeline(marriageEventsData.title, marriageEventsData.events, true)}
       </div>
     </section>
   );

@@ -20,18 +20,23 @@ import { LoadingScreen } from './components/LoadingScreen';
 import { triggerConfetti } from './utils/confetti';
 import { ArrowUp } from 'lucide-react';
 import { Language } from './types';
+import { NavBar } from './components/NavBar';
 
-type Section = 'home' | 'messages' | 'gallery' | 'rsvp' | 'our-gallery';
+// Remove VenueDirections import
+// Remove 'venue' from Section type
+type Section = 'home' | 'messages' | 'gallery' | 'rsvp' | 'our-gallery' | 'couple' | 'story' | 'events' | 'support';
 
 export const App: React.FC = () => {
+  // All hooks must be at the top level
   const { language, setLanguage } = useLanguageStore();
   const [currentSection, setCurrentSection] = useState<Section>('home');
+  const [activeSection, setActiveSection] = useState<Section>('home');
   const [isLoading, setIsLoading] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  
-  // Reset language on page refresh
+
+  // All useEffects together
   useEffect(() => {
-    return setLanguage(null as Language);
+    setLanguage(null as Language);
   }, []);
 
   useEffect(() => {
@@ -43,6 +48,15 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Add a new state to track which modal is open
+  const [activeModal, setActiveModal] = useState<Section | null>(null);
+
+  // Functions after hooks
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -50,38 +64,33 @@ export const App: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  const handleSectionChange = (section: Section) => {
+    const element = document.getElementById(section);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setActiveSection(section);
+    setCurrentSection(section);
+    
+    // Close any open modal when navigating to a main section
+    setActiveModal(null);
+  };
 
+  // Add a function to handle modal sections
+  const handleModalOpen = (section: Section) => {
+    setActiveModal(section);
+  };
+
+  const handleModalClose = () => {
+    setActiveModal(null);
+  };
+
+  // Early return after hooks
   if (!language) {
     return <LanguageSelector />;
   }
 
-  const renderSection = () => {
-    switch (currentSection) {
-      case 'messages':
-        return <GuestMessageBoard language={language} />;
-      case 'gallery':
-        return <PhotoGallery language={language} />;
-      case 'our-gallery':
-        return <OurGallery language={language} />;
-      case 'rsvp':
-        return <RsvpForm language={language} />;
-      default:
-        return (
-          <>
-            <HeroSection language={language} />
-            <CoupleProfile language={language} />
-            <StoryTimeline language={language} />
-            <EventDetails language={language} />
-            <OurGallery language={language} />
-          </>
-        );
-    }
-  };
-
+  // Render method
   return (
     <>
       <AnimatePresence>
@@ -90,8 +99,171 @@ export const App: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-pastel-pink via-pastel-peach to-pastel-gold">
         <CursorEffect />
         <ParticlesBackground />
-        <LanguageToggle />
+        <NavBar language={language} setCurrentSection={handleSectionChange} activeSection={activeSection} />
+        {/* Remove the separate language toggle div */}
         
+        <main className="pt-16"> {/* Added padding-top to account for fixed navbar */}
+          <section id="home">
+            <HeroSection language={language} />
+          </section>
+          
+          <section id="couple">
+            <CoupleProfile language={language} />
+          </section>
+          
+          <section id="story">
+            <StoryTimeline language={language} />
+          </section>
+          
+          <section id="events">
+            <EventDetails language={language} />
+          </section>
+          
+          <section id="our-gallery">
+            <OurGallery language={language} />
+          </section>
+          
+          <section id="support">
+            <ContactSupport language={language} />
+          </section>
+
+          {/* These sections will be accessed via floating buttons only, not through scrolling */}
+          <div className="hidden">
+            <section id="messages">
+              <GuestMessageBoard language={language} />
+            </section>
+
+            <section id="gallery">
+              <PhotoGallery language={language} />
+            </section>
+
+            <section id="rsvp">
+              <RsvpForm language={language} />
+            </section>
+          </div>
+        </main>
+
+        {/* Floating action buttons - always visible */}
+        <motion.div 
+          className="fixed bottom-20 right-4 z-50 flex flex-col gap-4"
+          animate={{ y: [0, -10, 0] }}
+          transition={{ 
+            repeat: Infinity,
+            duration: 3,
+            ease: "easeInOut"
+          }}
+        >
+          <button
+            onClick={() => {
+              handleModalOpen('messages');
+              triggerConfetti();
+            }}
+            className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl 
+              transition-all duration-300 hover:scale-110 hover:bg-deep-rose hover:text-white"
+          >
+            {language === 'en' ? 'Messages' : 'సందేశాలు'}
+          </button>
+          <button
+            onClick={() => handleModalOpen('gallery')}
+            className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            {language === 'en' ? 'Share Photos' : 'ఫోటోలు షేర్ చేయండి'}
+          </button>
+          <button
+            onClick={() => handleModalOpen('rsvp')}
+            className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            RSVP
+          </button>
+        </motion.div>
+
+        {/* Modal sections */}
+        <AnimatePresence>
+          {activeModal === 'messages' && (
+            <motion.div 
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleModalClose}
+            >
+              <motion.div 
+                className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={handleModalClose}
+                  className="absolute top-4 right-4 bg-deep-rose text-white rounded-full p-2 hover:bg-deep-rose/80 transition-colors"
+                >
+                  ✕
+                </button>
+                <div className="p-6">
+                  <GuestMessageBoard language={language} />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {activeModal === 'gallery' && (
+            <motion.div 
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleModalClose}
+            >
+              <motion.div 
+                className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={handleModalClose}
+                  className="absolute top-4 right-4 bg-deep-rose text-white rounded-full p-2 hover:bg-deep-rose/80 transition-colors"
+                >
+                  ✕
+                </button>
+                <div className="p-6">
+                  <PhotoGallery language={language} />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {activeModal === 'rsvp' && (
+            <motion.div 
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleModalClose}
+            >
+              <motion.div 
+                className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={handleModalClose}
+                  className="absolute top-4 right-4 bg-deep-rose text-white rounded-full p-2 hover:bg-deep-rose/80 transition-colors"
+                >
+                  ✕
+                </button>
+                <div className="p-6">
+                  <RsvpForm language={language} />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Scroll to Top Button */}
         <AnimatePresence>
           {showScrollTop && (
@@ -107,60 +279,6 @@ export const App: React.FC = () => {
             </motion.button>
           )}
         </AnimatePresence>
-
-        {currentSection !== 'home' && (
-          <BackButton onBack={() => setCurrentSection('home')} />
-        )}
-        
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            {renderSection()}
-          </motion.div>
-        </AnimatePresence>
-        
-        {currentSection === 'home' && (
-          <>
-            <motion.div 
-              className="fixed bottom-20 right-4 z-50 flex flex-col gap-4"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ 
-                repeat: Infinity,
-                duration: 3,
-                ease: "easeInOut"
-              }}
-            >
-              <button
-                onClick={() => {
-                  setCurrentSection('messages');
-                  triggerConfetti();
-                }}
-                className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl 
-                  transition-all duration-300 hover:scale-110 hover:bg-deep-rose hover:text-white"
-                >
-                  {language === 'en' ? 'Messages' : 'సందేశాలు'}
-                </button>
-              <button
-                onClick={() => setCurrentSection('gallery')}
-                className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                {language === 'en' ? 'Share Photos' : 'ఫోటోలు షేర్ చేయండి'}
-              </button>
-              <button
-                onClick={() => setCurrentSection('rsvp')}
-                className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                RSVP
-              </button>
-            </motion.div>
-            <ContactSupport language={language} />
-          </>
-        )}
         
         <AudioPlayer />
       </div>
