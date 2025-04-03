@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { Calendar, Clock, MapPin } from 'lucide-react'; // Make sure to import Calendar
 import type { Language } from '../types';
+import { SumuhurthamPlayer } from './SumuhurthamPlayer';
 
 interface Props {
   language: Language;
@@ -96,41 +98,60 @@ export const EventDetails: React.FC<Props> = ({ language }) => {
   }, [language, event.venue, event.address, event.date, event.time]);
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-pastel-pink to-white">
+    <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-serif text-deep-rose text-center mb-12">
-          {event.title}
+          {language === 'en' ? 'Wedding Events' : 'వివాహ కార్యక్రమాలు'}
         </h2>
         
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Event Information */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-2xl font-serif text-deep-rose mb-2">
-                  {event.venue}
-                </h3>
-                <p className="text-gray-600">{event.address}</p>
+        {/* Wedding venue details */}
+        <div className="mt-8">
+          <h3 className="text-3xl font-serif text-deep-rose text-center mb-8">
+            {event.title}
+          </h3>
+          
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="bg-pastel-pink/10 p-8 rounded-2xl">
+              <div className="flex flex-col space-y-4">
+                <div className="flex items-start">
+                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                    <Calendar className="text-deep-rose w-6 h-6" />
+                  </span>
+                  <div>
+                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Date' : 'తేదీ'}</h4>
+                    <p className="text-gray-600">{event.date}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                    <Clock className="text-deep-rose w-6 h-6" />
+                  </span>
+                  <div>
+                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Time' : 'సమయం'}</h4>
+                    <p className="text-gray-600">{event.time}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start">
+                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                    <MapPin className="text-deep-rose w-6 h-6" />
+                  </span>
+                  <div>
+                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Venue' : 'వేదిక'}</h4>
+                    <p className="text-gray-600">{event.venue}</p>
+                    <p className="text-gray-600 mt-1">{event.address}</p>
+                  </div>
+                </div>
+                
+                <p className="text-gray-700 mt-4">{event.description}</p>
               </div>
-              
-              <div>
-                <p className="text-xl font-serif text-deep-rose mb-2">
-                  {event.date}
-                </p>
-                <p className="text-gray-600">{event.time}</p>
-              </div>
-              
-              <p className="text-gray-600 italic">
-                {event.description}
-              </p>
+            </div>
+            
+            <div className="h-[400px] rounded-2xl overflow-hidden shadow-lg">
+              <div ref={mapRef} className="w-full h-full"></div>
             </div>
           </div>
-
-          {/* Map */}
-          <div 
-            ref={mapRef}
-            className="h-[400px] rounded-3xl overflow-hidden shadow-xl"
-          />
         </div>
       </div>
     </section>

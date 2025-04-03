@@ -21,10 +21,11 @@ import { triggerConfetti } from './utils/confetti';
 import { ArrowUp } from 'lucide-react';
 import { Language } from './types';
 import { NavBar } from './components/NavBar';
+import { SumuhurthamPlayer } from './components/SumuhurthamPlayer';
 
 // Remove VenueDirections import
 // Remove 'venue' from Section type
-type Section = 'home' | 'messages' | 'gallery' | 'rsvp' | 'our-gallery' | 'couple' | 'story' | 'events' | 'support';
+type Section = 'home' | 'messages' | 'gallery' | 'rsvp' | 'our-gallery' | 'couple' | 'story' | 'events' | 'support' | 'sumuhurtham';
 
 export const App: React.FC = () => {
   // All hooks must be at the top level
@@ -100,7 +101,6 @@ export const App: React.FC = () => {
         <CursorEffect />
         <ParticlesBackground />
         <NavBar language={language} setCurrentSection={handleSectionChange} activeSection={activeSection} />
-        {/* Remove the separate language toggle div */}
         
         <main className="pt-16"> {/* Added padding-top to account for fixed navbar */}
           <section id="home">
@@ -115,9 +115,16 @@ export const App: React.FC = () => {
             <StoryTimeline language={language} />
           </section>
           
+          <section id="sumuhurtham">
+            <SumuhurthamPlayer language={language} />
+          </section>
+          
           <section id="events">
             <EventDetails language={language} />
           </section>
+          
+          {/* Remove the standalone SumuhurthamPlayer from here */}
+          {/* <SumuhurthamPlayer language={language} /> */}
           
           <section id="our-gallery">
             <OurGallery language={language} />

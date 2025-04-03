@@ -13,26 +13,16 @@ interface Props {
 export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = {
-    en: [
-      { id: 'home', label: 'Home' },
-      { id: 'couple', label: 'Couple Profile' },
-      { id: 'story', label: 'Our Story and Wedding Events' },
-      { id: 'events', label: 'Venue' },
-      { id: 'our-gallery', label: 'Our Gallery' },
-      { id: 'support', label: 'Guest Support' },
-    ],
-    te: [
-      { id: 'home', label: 'హోమ్' },
-      { id: 'couple', label: 'జంట ప్రొఫైల్' },
-      { id: 'story', label: 'మా కథ మరియు వివాహ కార్యక్రమాలు' },
-      { id: 'events', label: 'వేదిక' },
-      { id: 'our-gallery', label: 'మా గ్యాలరీ' },
-      { id: 'support', label: 'అతిథి మద్దతు' },
-    ]
-  };
-
-  // Removed messages, RSVP, and share photos from navigation
+  // Fixed navItems structure - it's a flat array, not indexed by language
+  const navItems = [
+    { id: 'home', label: language === 'en' ? 'Home' : 'హోమ్' },
+    { id: 'couple', label: language === 'en' ? 'Couple' : 'జంట' },
+    { id: 'story', label: language === 'en' ? 'Our Story' : 'మా కథ' },
+    { id: 'sumuhurtham', label: language === 'en' ? 'Sumuhurtham' : 'సుముహుర్తం' },
+    { id: 'events', label: language === 'en' ? 'Events' : 'కార్యక్రమాలు' },
+    { id: 'our-gallery', label: language === 'en' ? 'Gallery' : 'గ్యాలరీ' },
+    { id: 'support', label: language === 'en' ? 'Contact' : 'సంప్రదించండి' }
+  ];
 
   const handleNavClick = (section: Section) => {
     setCurrentSection(section);
@@ -48,7 +38,7 @@ export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSec
             {/* Empty div for spacing */}
           </div>
           <ul className="flex items-center justify-center space-x-6 py-3 w-4/6">
-            {navItems[language].map((item) => (
+            {navItems.map((item) => (
               <li key={item.id}>
                 <motion.button
                   onClick={() => handleNavClick(item.id as Section)}
@@ -91,7 +81,7 @@ export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSec
           exit={{ opacity: 0, height: 0 }}
         >
           <ul className="flex flex-col py-2">
-            {navItems[language].map((item) => (
+            {navItems.map((item) => (
               <li key={item.id} className="border-b border-gray-100 last:border-b-0">
                 <button
                   onClick={() => handleNavClick(item.id as Section)}
