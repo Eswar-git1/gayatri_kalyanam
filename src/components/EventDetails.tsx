@@ -100,57 +100,51 @@ export const EventDetails: React.FC<Props> = ({ language }) => {
   return (
     <section className="py-20 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
+        {/* Removed the Wedding Events heading, keeping only the venue title */}
         <h2 className="text-4xl font-serif text-deep-rose text-center mb-12">
-          {language === 'en' ? 'Wedding Events' : 'వివాహ కార్యక్రమాలు'}
+          {event.title}
         </h2>
         
-        {/* Wedding venue details */}
-        <div className="mt-8">
-          <h3 className="text-3xl font-serif text-deep-rose text-center mb-8">
-            {event.title}
-          </h3>
-          
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-pastel-pink/10 p-8 rounded-2xl">
-              <div className="flex flex-col space-y-4">
-                <div className="flex items-start">
-                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
-                    <Calendar className="text-deep-rose w-6 h-6" />
-                  </span>
-                  <div>
-                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Date' : 'తేదీ'}</h4>
-                    <p className="text-gray-600">{event.date}</p>
-                  </div>
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-pastel-pink/10 p-8 rounded-2xl">
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-start">
+                <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                  <Calendar className="text-deep-rose w-6 h-6" />
+                </span>
+                <div>
+                  <h4 className="font-medium text-gray-900">{language === 'en' ? 'Date' : 'తేదీ'}</h4>
+                  <p className="text-gray-600">{event.date}</p>
                 </div>
-                
-                <div className="flex items-start">
-                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
-                    <Clock className="text-deep-rose w-6 h-6" />
-                  </span>
-                  <div>
-                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Time' : 'సమయం'}</h4>
-                    <p className="text-gray-600">{event.time}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
-                    <MapPin className="text-deep-rose w-6 h-6" />
-                  </span>
-                  <div>
-                    <h4 className="font-medium text-gray-900">{language === 'en' ? 'Venue' : 'వేదిక'}</h4>
-                    <p className="text-gray-600">{event.venue}</p>
-                    <p className="text-gray-600 mt-1">{event.address}</p>
-                  </div>
-                </div>
-                
-                <p className="text-gray-700 mt-4">{event.description}</p>
               </div>
+              
+              <div className="flex items-start">
+                <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                  <Clock className="text-deep-rose w-6 h-6" />
+                </span>
+                <div>
+                  <h4 className="font-medium text-gray-900">{language === 'en' ? 'Time' : 'సమయం'}</h4>
+                  <p className="text-gray-600">{event.time}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <span className="bg-deep-rose/10 p-2 rounded-full mr-4">
+                  <MapPin className="text-deep-rose w-6 h-6" />
+                </span>
+                <div>
+                  <h4 className="font-medium text-gray-900">{language === 'en' ? 'Venue' : 'వేదిక'}</h4>
+                  <p className="text-gray-600">{event.venue}</p>
+                  <p className="text-gray-600 mt-1">{event.address}</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-700 mt-4">{event.description}</p>
             </div>
-            
-            <div className="h-[400px] rounded-2xl overflow-hidden shadow-lg">
-              <div ref={mapRef} className="w-full h-full"></div>
-            </div>
+          </div>
+          
+          <div className="h-[400px] rounded-2xl overflow-hidden shadow-lg">
+            <div ref={mapRef} className="w-full h-full"></div>
           </div>
         </div>
       </div>

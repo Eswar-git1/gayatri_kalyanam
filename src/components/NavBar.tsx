@@ -13,15 +13,15 @@ interface Props {
 export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Fixed navItems structure - it's a flat array, not indexed by language
+  // Updated navigation items with the requested section names
   const navItems = [
     { id: 'home', label: language === 'en' ? 'Home' : 'హోమ్' },
-    { id: 'couple', label: language === 'en' ? 'Couple' : 'జంట' },
+    { id: 'couple', label: language === 'en' ? 'Couple Profile' : 'జంట ప్రొఫైల్' },
     { id: 'story', label: language === 'en' ? 'Our Story' : 'మా కథ' },
     { id: 'sumuhurtham', label: language === 'en' ? 'Sumuhurtham' : 'సుముహుర్తం' },
-    { id: 'events', label: language === 'en' ? 'Events' : 'కార్యక్రమాలు' },
-    { id: 'our-gallery', label: language === 'en' ? 'Gallery' : 'గ్యాలరీ' },
-    { id: 'support', label: language === 'en' ? 'Contact' : 'సంప్రదించండి' }
+    { id: 'events', label: language === 'en' ? 'Venue' : 'వేదిక' },
+    { id: 'our-gallery', label: language === 'en' ? 'Our Gallery' : 'మా గ్యాలరీ' },
+    { id: 'support', label: language === 'en' ? 'Guest Support' : 'అతిథి మద్దతు' }
   ];
 
   const handleNavClick = (section: Section) => {
@@ -58,11 +58,11 @@ export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSec
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Enhanced styling */}
         <div className="md:hidden flex items-center justify-between py-3">
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-gray-700 focus:outline-none"
+            className="text-deep-rose p-2 rounded-full bg-pastel-pink/20 hover:bg-pastel-pink/40 transition-colors duration-300 focus:outline-none"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -72,21 +72,24 @@ export const NavBar: React.FC<Props> = ({ language, setCurrentSection, activeSec
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Enhanced styling with color palette */}
       {isMenuOpen && (
         <motion.div 
-          className="md:hidden bg-white shadow-lg"
+          className="md:hidden bg-gradient-to-b from-white to-pastel-pink/30 shadow-lg"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
         >
           <ul className="flex flex-col py-2">
             {navItems.map((item) => (
-              <li key={item.id} className="border-b border-gray-100 last:border-b-0">
+              <li key={item.id} className="border-b border-pastel-pink/20 last:border-b-0">
                 <button
                   onClick={() => handleNavClick(item.id as Section)}
-                  className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors duration-200
-                    ${activeSection === item.id ? 'bg-deep-rose/10 text-deep-rose font-bold' : 'text-gray-700'}
+                  className={`w-full text-left px-4 py-4 text-sm font-medium transition-all duration-200
+                    ${activeSection === item.id 
+                      ? 'bg-deep-rose/10 text-deep-rose font-bold pl-6' 
+                      : 'text-gray-700 hover:bg-pastel-pink/20 hover:pl-6'}
                   `}
                 >
                   {item.label}

@@ -8,6 +8,7 @@ interface Props {
   language: Language;
 }
 
+// Update translations to include guest room text
 const translations = {
   en: {
     title: 'RSVP',
@@ -21,6 +22,7 @@ const translations = {
     no: 'Sorry, I cannot attend',
     guests: 'Number of Additional Guests',
     dietary: 'Any Requirements',
+    guestRoom: 'Do you need guest room accommodation?',
     submit: 'Submit RSVP',
     success: 'Thank you for your response!',
     error: 'Error submitting RSVP'
@@ -37,6 +39,7 @@ const translations = {
     no: 'క్షమించండి, నేను హాజరు కాలేను',
     guests: 'అదనపు అతిథుల సంఖ్య',
     dietary: 'ఆహార అవసరాలు',
+    guestRoom: 'మీకు అతిథి గది వసతి అవసరమా?',
     submit: 'సమర్పించండి',
     success: 'మీ స్పందనకు ధన్యవాదాలు!',
     error: 'సమర్పించడంలో లోపం'
@@ -50,7 +53,9 @@ export const RsvpForm: React.FC<Props> = ({ language }) => {
     location: '',
     attending: true,
     numberOfGuests: 0,
-    dietaryRequirements: ''
+    dietaryRequirements: '',
+    guestRoomRequired: false,
+    email: 'no-email@example.com' // Add default email to fix the constraint issue
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const t = translations[language];
@@ -69,7 +74,9 @@ export const RsvpForm: React.FC<Props> = ({ language }) => {
             location: formData.location,
             attending: formData.attending,
             number_of_guests: formData.numberOfGuests,
-            dietary_requirements: formData.dietaryRequirements
+            dietary_requirements: formData.dietaryRequirements,
+            guest_room_required: formData.guestRoomRequired,
+            email: formData.email // Include email field to satisfy the constraint
           }
         ]);
 
@@ -84,7 +91,9 @@ export const RsvpForm: React.FC<Props> = ({ language }) => {
           location: '',
           attending: true,
           numberOfGuests: 0,
-          dietaryRequirements: ''
+          dietaryRequirements: '',
+          guestRoomRequired: false,
+          email: 'no-email@example.com'
         });
       }
     } catch (error) {
@@ -93,6 +102,7 @@ export const RsvpForm: React.FC<Props> = ({ language }) => {
     }
   };
 
+  // In the form, add the guest room checkbox after the dietary requirements field
   return (
     <section className="py-20 px-4 bg-gradient-to-br from-white to-pastel-pink">
       <div className="max-w-6xl mx-auto">
@@ -215,6 +225,19 @@ export const RsvpForm: React.FC<Props> = ({ language }) => {
                   onChange={(e) => setFormData({ ...formData, dietaryRequirements: e.target.value })}
                   className="w-full p-4 rounded-xl border border-gray-200 focus:border-deep-rose focus:ring-1 focus:ring-deep-rose h-32 transition-all duration-300"
                 />
+              </div>
+              
+              {/* Add guest room checkbox */}
+              <div className="p-4 bg-pastel-pink/10 rounded-xl">
+                <label className="flex items-start">
+                  <input
+                    type="checkbox"
+                    checked={formData.guestRoomRequired}
+                    onChange={(e) => setFormData({ ...formData, guestRoomRequired: e.target.checked })}
+                    className="mt-1 text-deep-rose rounded"
+                  />
+                  <span className="ml-2 text-gray-700">{t.guestRoom}</span>
+                </label>
               </div>
             </>
           )}
